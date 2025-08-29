@@ -1,0 +1,24 @@
+@page "/profile/{id}"
+@inject HttpClient Http
+
+@code {
+    [Parameter] public string id { get; set; }
+    private SkillSnap.Shared.Models.UserProfile profile;
+
+    protected override async Task OnInitializedAsync()
+    {
+        profile = await Http.GetFromJsonAsync<SkillSnap.Shared.Models.UserProfile>($"api/UserProfile/{id}");
+    }
+}
+
+@if (profile != null)
+{
+    <h2>@profile.Name</h2>
+    <p>@profile.Bio</p>
+    <ul>
+        @foreach (var skill in profile.Skills)
+        {
+            <li>@skill</li>
+        }
+    </ul>
+}
